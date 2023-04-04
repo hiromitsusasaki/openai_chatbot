@@ -1,0 +1,37 @@
+version: '3'
+services:
+  serverless:
+    build:
+      context: .
+      args:
+        - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+        - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+    command: sls offline --host 0.0.0.0
+    volumes:
+      - .:/app
+    working_dir: /app
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    stdin_open: true
+    tty: true
+  dynamodb-local:
+    image: 'amazon/dynamodb-local'
+    container_name: dynamodb-local
+    user: root
+    ports:
+      - 8000:8000
+    volumes:
+      - ./dynamodb_data:/data
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/data"]
+
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin:latest
+    container_name: dynamodb-admin
+    environment:
+      - DYNAMO_ENDPOINT=dynamodb-local:8000
+    ports:
+      - 8001:8001
+    depends_on:
+      - dynamodb-local
