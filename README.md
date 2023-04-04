@@ -2,7 +2,7 @@
 
 ## Description
 
-OpenAI Chatbot API is a RESTful API for the Chatbot powered by GTP-3.5-Turbo.
+OpenAI Chatbot API is a Web API for the Chatbot on Slack powered by GTP-3.5-Turbo.
 
 ## Setup
 
