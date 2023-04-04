@@ -17,9 +17,10 @@ def conversation_from_slack(event:, context:)
   return { statusCode: 200 } unless event['headers']['x-slack-retry-num'].nil?
 
   request_body = JSON.parse(event['body'])
-  message = request_body['event']['text'].delete_prefix('<@U04GLEKAATU> ')
+  message = request_body['event']['text'].delete_prefix('{bot id} ') #remove bot id like <@U04GLEKAATU>
   channel = request_body['event']['channel']
-  reply = ChatRequest.new.send(message)
+  session_id = request_body['event']['user']
+  reply = ChatRequest.new.send(message, session_id)
   post_to_slack(channel, reply)
 
   { statusCode: 200 }

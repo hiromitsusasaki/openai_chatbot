@@ -11,10 +11,10 @@ class ChatRequest
     @chat_session = ChatSession.new
   end
 
-  def send(message)
+  def send(message, session_id)
     recent_messages = [{ role: "system", content: "あなたはとても優秀なAIアシスタントです" }]
     recent_messages.concat(
-      @chat_session.get_last_messages(2).map do |item|
+      @chat_session.get_last_messages(2, session_id).map do |item|
         {
           role: item["Role"],
           content: item["Message"],
@@ -34,8 +34,8 @@ class ChatRequest
     end
 
     reply_message = response.dig("choices", 0, "message", "content")
-    @chat_session.add_message('user', message)
-    @chat_session.add_message('assistant', reply_message)
+    @chat_session.add_message('user', message, session_id)
+    @chat_session.add_message('assistant', reply_message, session_id)
 
     reply_message
   rescue StandardError => e
