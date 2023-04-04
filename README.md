@@ -20,6 +20,13 @@ then start serverless offline server at http://localhost:3000 and DynamoDB local
 
 ## deploy to AWS
 
+replace {bot id} to your slack bot id.
+
+`handler.rb`
+```
+message = request_body['event']['text'].delete_prefix('{bot id} ')
+```
+
 ```zsh
 docker compose up
 docker compose exec serverless sls deploy --stage prod
