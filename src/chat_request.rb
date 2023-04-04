@@ -14,7 +14,7 @@ class ChatRequest
   def send(message, session_id="1")
     recent_messages = [{ role: "system", content: "あなたはとても優秀なAIアシスタントです" }]
     recent_messages.concat(
-      @chat_session.get_last_messages(2, session_id).map do |item|
+      @chat_session.get_last_messages(4, session_id).map do |item|
         {
           role: item["Role"],
           content: item["Message"],
