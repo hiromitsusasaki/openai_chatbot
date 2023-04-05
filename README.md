@@ -25,13 +25,6 @@ then start serverless offline server at http://localhost:3000 and DynamoDB local
 
 ## deploy to AWS （as Slack Chat Bot）
 
-replace {bot id} to your slack bot id.
-
-`handler.rb`
-```
-message = request_body['event']['text'].delete_prefix('{bot id} ')
-```
-
 ```zsh
 docker compose up
 docker compose exec serverless sls deploy --stage prod
@@ -46,4 +39,3 @@ create Slack bot app on your workspace and set its credentials to environment va
 ## Todo
 
 - API requests from Slack are processed synchronously, so make processing asynchronous using jobs, etc., to return response codes earlier.
-
