@@ -14,14 +14,13 @@ def conversation(event:, context:)
 end
 
 def conversation_from_slack(event:, context:)
-  return { statusCode: 200 } unless event['headers']['x-slack-retry-num'].nil?
+  p event.inspect
+  return { 'statusCode': 200 } unless event['headers']['x-slack-retry-num'].nil?
 
   request_body = event['body']
 
   timestamp = event['headers']['x-slack-request-timestamp']
   signature = event['headers']['x-slack-signature']
-
-  request_body = JSON.parse(event['body'])
 
   sig_basestring = "v0:#{timestamp}:#{request_body}"
   slack_signing_secret = ENV['SLACK_SIGNING_SECRET']
@@ -33,27 +32,22 @@ def conversation_from_slack(event:, context:)
     request = JSON.parse(request_body)
     if request['type'] == 'url_verification'
       return {
-        statusCode: 200,
-        body: request['challenge'],
-        headers: {
+        'statusCode': 200,
+        'body': request['challenge'],
+        'headers': {
           'Content-Type': 'application/json'
         }
       }
     else
-      message = request['event']['text'].delete_prefix('{bot id} ')
+      message = request['event']['text'].gsub(/<@[A-Z0-9]+>/, '')
       channel = request['event']['channel']
       session_id = request['event']['user']
       reply = ChatRequest.new.send(message, session_id)
       post_to_slack(channel, reply)
-      return { statusCode: 200 }
+      return { 'statusCode': 200 }
     end
   else
-    return {
-      statusCode: 403,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
+    return { statusCode: 403 }
   end
 end
 
