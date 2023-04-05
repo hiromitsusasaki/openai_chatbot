@@ -7,6 +7,8 @@ OpenAI Chatbot API is a Web API for the Chatbot on Slack powered by GTP-3.5-Turb
 ### Caution!
 This code base is incomplete and immature. Please refer to the Todo section.
 
+`conversation` function with GET API is for local operation checks and should not be deployed to the production environment
+
 ## Setup
 
 ```zsh
@@ -44,4 +46,4 @@ create Slack bot app on your workspace and set its credentials to environment va
 ## Todo
 
 - API requests from Slack are processed synchronously, so make processing asynchronous using jobs, etc., to return response codes earlier.
-- Implement requestor restrictions and authentication mechanisms to prevent unauthorized access.
+
