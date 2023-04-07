@@ -6,8 +6,8 @@ def conversation(event:, context:)
   params = event['queryStringParameters']
 
   {
-    statusCode: 200,
-    body: {
+    'statusCode': 200,
+    'body': {
       response: ChatRequest.new.send(params['speech'])
     }.to_json
   }
@@ -33,9 +33,9 @@ def conversation_from_slack(event:, context:)
     if request['type'] == 'url_verification'
       return {
         'statusCode': 200,
-        'body': request['challenge'],
+        'body': { challenge: request['challenge'] }.to_json,
         'headers': {
-          'Content-Type': 'application/json'
+          'Content-type': 'application/json'
         }
       }
     else
@@ -47,7 +47,7 @@ def conversation_from_slack(event:, context:)
       return { 'statusCode': 200 }
     end
   else
-    return { statusCode: 403 }
+    return { 'statusCode': 403 }
   end
 end
 
@@ -68,4 +68,3 @@ def post_to_slack(channel, response)
   req.body = params.to_json
   http.request(req)
 end
-
